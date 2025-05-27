@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
+import { Volume2, VolumeX } from "lucide-react";
 import "./index.css";
 import "./App.css";
 
@@ -16,6 +17,82 @@ const images = [
   { src: "/images/photo9.jpeg", caption: "But Fofo share for Nikki :)" },
 ];
 
+function MusicPlayer() {
+  const audioRef = useRef(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    const handleInteraction = () => {
+      if (audioRef.current && !hasInteracted) {
+        audioRef.current.play().then(() => {
+          setHasInteracted(true);
+          setPlaying(true);
+        }).catch((err) => {
+          console.warn("Autoplay blocked:", err);
+        });
+      }
+    };
+
+    window.addEventListener("click", handleInteraction);
+    window.addEventListener("touchstart", handleInteraction);
+
+    return () => {
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    };
+  }, [hasInteracted]);
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !muted;
+      setMuted(!muted);
+    }
+  };
+
+  return (
+    <div className="fixed top-5 left-5 z-50 flex items-center gap-2">
+      <audio
+        ref={audioRef}
+        loop
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+      >
+        <source src="/song.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+
+      <button
+        onClick={toggleMute}
+        className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition"
+      >
+        {muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+      </button>
+
+      {!muted && playing && (
+        <div className="flex gap-[2px]">
+          {[...Array(4)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="w-[3px] h-4 bg-white rounded"
+              animate={{
+                height: ["6px", "24px", "6px"],
+              }}
+              transition={{
+                duration: 0.6 + i * 0.2,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const [current, setCurrent] = useState(0);
   const [loadedImages, setLoadedImages] = useState({});
@@ -27,7 +104,6 @@ function App() {
     trackMouse: true,
   });
 
-  // Preload all images once
   useEffect(() => {
     const cache = {};
     images.forEach((img) => {
@@ -106,10 +182,7 @@ function App() {
         ))}
       </div>
 
-      <audio autoPlay loop>
-        <source src="/song.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
+      <MusicPlayer />
     </div>
   );
 }
