@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSwipeable } from "react-swipeable";
 import "./index.css";
 import "./App.css";
 
 const images = [
-  { src: "/images/photo1.jpeg", caption: "Their first trip together ❤️" },
+  { src: "/images/photo1.jpeg", caption: "Their first international trip together ❤️" },
   { src: "/images/photo2.jpeg", caption: "Love for the mountains!!" },
   { src: "/images/photo3.jpeg", caption: "The proposal moment 💍" },
   { src: "/images/photo4.jpeg", caption: "So Happy Together!!" },
@@ -18,6 +19,14 @@ const images = [
 function App() {
   const [current, setCurrent] = useState(0);
 
+  const handlers = useSwipeable({
+  onSwipedLeft: () => setCurrent((prev) => (prev + 1) % images.length),
+  onSwipedRight: () => setCurrent((prev) => (prev - 1 + images.length) % images.length),
+  preventScrollOnSwipe: true,
+  trackMouse: true,
+});
+
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
@@ -27,7 +36,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 text-center">
-      <div className="relative w-full max-w-4xl max-h-[80vh] flex items-center justify-center">
+      <div  {...handlers} className="relative w-full max-w-4xl max-h-[80vh] flex items-center justify-center">
         <AnimatePresence mode="wait" initial={false}>
           <motion.img
             key={images[current].src}
