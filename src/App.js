@@ -18,14 +18,27 @@ const images = [
 
 function App() {
   const [current, setCurrent] = useState(0);
+  const [loadedImages, setLoadedImages] = useState({});
 
   const handlers = useSwipeable({
-  onSwipedLeft: () => setCurrent((prev) => (prev + 1) % images.length),
-  onSwipedRight: () => setCurrent((prev) => (prev - 1 + images.length) % images.length),
-  preventScrollOnSwipe: true,
-  trackMouse: true,
-});
+    onSwipedLeft: () => setCurrent((prev) => (prev + 1) % images.length),
+    onSwipedRight: () => setCurrent((prev) => (prev - 1 + images.length) % images.length),
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
 
+  // Preload all images once
+  useEffect(() => {
+    const cache = {};
+    images.forEach((img) => {
+      const image = new Image();
+      image.src = img.src;
+      image.onload = () => {
+        cache[img.src] = true;
+        setLoadedImages((prev) => ({ ...prev, [img.src]: true }));
+      };
+    });
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -34,16 +47,27 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  const isLoaded = loadedImages[images[current].src];
+
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 text-center">
-      <div  {...handlers} className="relative w-full max-w-4xl max-h-[80vh] flex items-center justify-center">
+    <div
+      {...handlers}
+      className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 text-center"
+    >
+      <div className="relative w-full max-w-4xl max-h-[80vh] flex items-center justify-center">
+        {!isLoaded && (
+          <div className="absolute text-gray-400 text-sm animate-pulse">
+            Loading...
+          </div>
+        )}
+
         <AnimatePresence mode="wait" initial={false}>
           <motion.img
             key={images[current].src}
             src={images[current].src}
             alt={`Slide ${current}`}
             initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
+            animate={{ opacity: isLoaded ? 1 : 0, scale: 1 }}
             exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.6 }}
             className="max-w-full max-h-[80vh] rounded-2xl shadow-2xl object-contain"
@@ -52,17 +76,17 @@ function App() {
       </div>
 
       <AnimatePresence mode="wait" initial={false}>
-    <motion.p
-      key={images[current].caption || current}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="mt-4 text-lg italic text-gray-300"
-    >
-      {images[current].caption}
-    </motion.p>
-  </AnimatePresence>
+        <motion.p
+          key={images[current].caption || current}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+          className="mt-4 text-lg italic text-gray-300"
+        >
+          {images[current].caption}
+        </motion.p>
+      </AnimatePresence>
 
       <div className="flex justify-center mt-4 space-x-2">
         {images.map((_, idx) => (
