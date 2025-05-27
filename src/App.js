@@ -8,9 +8,9 @@ const images = [
   { src: "/images/photo2.jpeg", caption: "Love for the mountains!!" },
   { src: "/images/photo3.jpeg", caption: "The proposal moment 💍" },
   { src: "/images/photo4.jpeg", caption: "So Happy Together!!" },
-  { src: "/images/photo5.jpeg", caption: "" },
-  { src: "/images/photo6.jpeg", caption: "" },
-  { src: "/images/photo7.jpeg", caption: "" },
+  { src: "/images/photo5.jpeg", caption: "Yahan kuch likhna padega" },
+  { src: "/images/photo6.jpeg", caption: "Yahan kuch likhna padega" },
+  { src: "/images/photo7.jpeg", caption: "Yahan kuch likhna padega" },
   { src: "/images/photo8.jpeg", caption: "Fofo doesn't like sharing :(" },
   { src: "/images/photo9.jpeg", caption: "But Fofo share for Nikki :)" },
 ];
