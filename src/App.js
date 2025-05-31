@@ -168,7 +168,7 @@ function App() {
         {images.map((_, idx) => (
           <span
             key={idx}
-            className={`w-2 h-2 rounded-full cursor-pointer transition-colors duration-300 ${
+            className={`w-2.5 h-2.5 rounded-full cursor-pointer transition-colors duration-300 ${
               idx === current ? "bg-white" : "bg-gray-600"
             }`}
             onClick={() => setCurrent(idx)}
