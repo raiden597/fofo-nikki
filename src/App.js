@@ -6,13 +6,13 @@ import "./index.css";
 import "./App.css";
 
 const images = [
-  { src: "/images/photo1.jpeg", caption: "Their first international trip together ❤️" },
-  { src: "/images/photo2.jpeg", caption: "Love for the mountains!!" },
-  { src: "/images/photo3.jpeg", caption: "The proposal moment 💍" },
-  { src: "/images/photo4.jpeg", caption: "So Happy Together!!" },
-  { src: "/images/photo5.jpeg", caption: "Yahan kuch likhna padega" },
-  { src: "/images/photo6.jpeg", caption: "Yahan kuch likhna padega" },
-  { src: "/images/photo7.jpeg", caption: "Yahan kuch likhna padega" },
+  { src: "/images/photo1.jpeg", caption: "In da Europe <3" },
+  { src: "/images/photo2.jpeg", caption: "Always up for a Hike :p" },
+  { src: "/images/photo3.jpeg", caption: "You know you’re in love when you can’t fall asleep because reality is finally better than your dreams." },
+  { src: "/images/photo4.jpeg", caption: "So Happy Together!" },
+  { src: "/images/photo5.jpeg", caption: "Such a Happy Couple!" },
+  { src: "/images/photo6.jpeg", caption: "Love Conquers All!" },
+  { src: "/images/photo7.jpeg", caption: "Love is that condition in which the happiness of another person is essential to your own." },
   { src: "/images/photo8.jpeg", caption: "Fofo doesn't like sharing :(" },
   { src: "/images/photo9.jpeg", caption: "But Fofo share for Nikki :)" },
 ];
